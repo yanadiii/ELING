@@ -1,13 +1,16 @@
 export default async function handler(req, res) {
   if (req.method !== "POST")
     return res.status(405).json({ error: "Method not allowed" });
-  const { message } = req.body;
 
+  const { message } = req.body;
   const systemPrompt =
-    "Anda adalah asisten ELING (Engage, Learn, Internalize, Navigate, Grow) untuk remaja Bali. Tugas: 1. Edukasi reproduksi reflektif. 2. Dekonstruksi habitus 'Sing Beling Sing Nganten'. 3. Jelaskan risiko medis & sosial secara suportif. Gunakan gaya bahasa remaja yang sopan.";
+    "Anda adalah asisten ELING untuk remaja Bali. Bantu dekonstruksi habitus 'Sing Beling Sing Nganten' secara suportif.";
 
   // --- OPSI 1: UTAMA (GEMINI) ---
   try {
+    console.log("Mencoba akses Gemini...");
+
+    // Pastikan URL ini benar dan API Key terbaca
     const geminiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
     const geminiResponse = await fetch(geminiURL, {
@@ -16,11 +19,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         contents: [
           {
-            parts: [
-              {
-                text: `Sistem: ${systemPrompt}\nUser: ${message}`,
-              },
-            ],
+            parts: [{ text: `${systemPrompt}\n\nPesan User: ${message}` }],
           },
         ],
       }),
@@ -28,9 +27,14 @@ export default async function handler(req, res) {
 
     const geminiData = await geminiResponse.json();
 
-    if (geminiResponse.ok && geminiData.candidates) {
-      // Kita bungkus respon Gemini agar formatnya sama dengan OpenAI
-      // Jadi index.html kamu tidak perlu diedit
+    // LOG UNTUK DEBUGGING (Cek di tab Logs Vercel)
+    if (!geminiResponse.ok) {
+      console.error("Gemini Error Detail:", JSON.stringify(geminiData));
+      throw new Error(`Gemini API Error: ${geminiResponse.status}`);
+    }
+
+    if (geminiData.candidates && geminiData.candidates[0].content) {
+      console.log("Gemini Berhasil!");
       return res.status(200).json({
         choices: [
           {
@@ -42,9 +46,12 @@ export default async function handler(req, res) {
       });
     }
 
-    throw new Error("Gemini Limit/Error");
+    throw new Error("Format respon Gemini tidak sesuai");
   } catch (error) {
-    console.log("Gemini gagal atau limit, beralih ke Cadangan (OpenAI)...");
+    console.warn(
+      "Gemini gagal, mencoba Cadangan (OpenAI)... Alasan:",
+      error.message,
+    );
 
     // --- OPSI 2: CADANGAN (OPENAI) ---
     try {
@@ -67,13 +74,15 @@ export default async function handler(req, res) {
       );
 
       const data = await openAIResponse.json();
-      if (openAIResponse.ok) return res.status(200).json(data);
+      if (openAIResponse.ok) {
+        console.log("OpenAI Berhasil!");
+        return res.status(200).json(data);
+      }
 
-      throw new Error("Semua pintu AI tertutup");
+      console.error("OpenAI pun Gagal:", JSON.stringify(data));
+      throw new Error("Semua AI tumbang");
     } catch (openError) {
-      return res
-        .status(500)
-        .json({ error: "Layanan sedang sibuk, coba lagi nanti." });
+      return res.status(500).json({ error: "Layanan sedang sibuk." });
     }
   }
 }
