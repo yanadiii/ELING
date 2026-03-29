@@ -6,74 +6,87 @@ export default async function handler(req, res) {
   const systemPrompt =
     "Anda adalah asisten ELING untuk remaja Bali. Bantu dekonstruksi habitus 'Sing Beling Sing Nganten' secara suportif.";
 
-  // --- OPSI 1: UTAMA (GEMINI) ---
-  try {
-    console.log("Mencoba akses Gemini v1...");
+  // Daftar model Gemini yang akan dicoba (Urutan prioritas)
+  const geminiModels = [
+    "gemini-1.5-flash-latest",
+    "gemini-1.5-flash",
+    "gemini-pro",
+  ];
+  let geminiSuccess = false;
+  let responseData = null;
 
-    // PERUBAHAN DI SINI: v1beta jadi v1
-    const geminiURL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+  // --- OPSI 1: LOOPING MODEL GEMINI ---
+  for (const modelName of geminiModels) {
+    if (geminiSuccess) break;
 
-    const geminiResponse = await fetch(geminiURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: `Sistem: ${systemPrompt}\n\nUser: ${message}` }],
-          },
-        ],
-      }),
-    });
-
-    const geminiData = await geminiResponse.json();
-
-    if (!geminiResponse.ok) {
-      console.error("Gemini Error Detail:", JSON.stringify(geminiData));
-      throw new Error(`Gemini Error: ${geminiResponse.status}`);
-    }
-
-    if (geminiData.candidates && geminiData.candidates[0].content) {
-      return res.status(200).json({
-        choices: [
-          {
-            message: {
-              content: geminiData.candidates[0].content.parts[0].text,
-            },
-          },
-        ],
-      });
-    }
-
-    throw new Error("Format respon tidak sesuai");
-  } catch (error) {
-    console.warn("Gemini Gagal, lempar ke OpenAI. Alasan:", error.message);
-
-    // --- OPSI 2: CADANGAN (OPENAI) ---
     try {
-      const openAIResponse = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: message },
-            ],
-          }),
-        },
-      );
+      console.log(`Mencoba akses Gemini: ${modelName}...`);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
-      const data = await openAIResponse.json();
-      if (openAIResponse.ok) return res.status(200).json(data);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            { parts: [{ text: `${systemPrompt}\n\nUser: ${message}` }] },
+          ],
+        }),
+      });
 
-      throw new Error("Semua AI tumbang");
-    } catch (openError) {
-      return res.status(500).json({ error: "Layanan sedang sibuk." });
+      const data = await response.json();
+
+      if (response.ok && data.candidates) {
+        console.log(`Berhasil pakai model: ${modelName}`);
+        responseData = {
+          choices: [
+            {
+              message: { content: data.candidates[0].content.parts[0].text },
+            },
+          ],
+        };
+        geminiSuccess = true;
+      } else {
+        console.warn(
+          `Model ${modelName} gagal:`,
+          data.error?.message || "Unknown error",
+        );
+      }
+    } catch (err) {
+      console.error(`Error saat mencoba ${modelName}:`, err.message);
     }
+  }
+
+  // Jika salah satu Gemini berhasil, kirim hasilnya
+  if (geminiSuccess) return res.status(200).json(responseData);
+
+  // --- OPSI 2: CADANGAN TERAKHIR (OPENAI) ---
+  console.log("Semua Gemini gagal, beralih ke OpenAI...");
+  try {
+    const openAIResponse = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: message },
+          ],
+        }),
+      },
+    );
+
+    const data = await openAIResponse.json();
+    if (openAIResponse.ok) return res.status(200).json(data);
+
+    return res
+      .status(500)
+      .json({ error: "Semua pintu AI tertutup sementara." });
+  } catch (openError) {
+    return res.status(500).json({ error: "Layanan benar-benar sedang sibuk." });
   }
 }
