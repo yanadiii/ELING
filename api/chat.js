@@ -8,10 +8,10 @@ export default async function handler(req, res) {
 
   // --- OPSI 1: UTAMA (GEMINI) ---
   try {
-    console.log("Mencoba akses Gemini...");
+    console.log("Mencoba akses Gemini v1...");
 
-    // Pastikan URL ini benar dan API Key terbaca
-    const geminiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+    // PERUBAHAN DI SINI: v1beta jadi v1
+    const geminiURL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
     const geminiResponse = await fetch(geminiURL, {
       method: "POST",
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         contents: [
           {
-            parts: [{ text: `${systemPrompt}\n\nPesan User: ${message}` }],
+            parts: [{ text: `Sistem: ${systemPrompt}\n\nUser: ${message}` }],
           },
         ],
       }),
@@ -27,14 +27,12 @@ export default async function handler(req, res) {
 
     const geminiData = await geminiResponse.json();
 
-    // LOG UNTUK DEBUGGING (Cek di tab Logs Vercel)
     if (!geminiResponse.ok) {
       console.error("Gemini Error Detail:", JSON.stringify(geminiData));
-      throw new Error(`Gemini API Error: ${geminiResponse.status}`);
+      throw new Error(`Gemini Error: ${geminiResponse.status}`);
     }
 
     if (geminiData.candidates && geminiData.candidates[0].content) {
-      console.log("Gemini Berhasil!");
       return res.status(200).json({
         choices: [
           {
@@ -46,12 +44,9 @@ export default async function handler(req, res) {
       });
     }
 
-    throw new Error("Format respon Gemini tidak sesuai");
+    throw new Error("Format respon tidak sesuai");
   } catch (error) {
-    console.warn(
-      "Gemini gagal, mencoba Cadangan (OpenAI)... Alasan:",
-      error.message,
-    );
+    console.warn("Gemini Gagal, lempar ke OpenAI. Alasan:", error.message);
 
     // --- OPSI 2: CADANGAN (OPENAI) ---
     try {
@@ -74,12 +69,8 @@ export default async function handler(req, res) {
       );
 
       const data = await openAIResponse.json();
-      if (openAIResponse.ok) {
-        console.log("OpenAI Berhasil!");
-        return res.status(200).json(data);
-      }
+      if (openAIResponse.ok) return res.status(200).json(data);
 
-      console.error("OpenAI pun Gagal:", JSON.stringify(data));
       throw new Error("Semua AI tumbang");
     } catch (openError) {
       return res.status(500).json({ error: "Layanan sedang sibuk." });
