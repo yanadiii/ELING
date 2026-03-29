@@ -1,5 +1,9 @@
-// api/chat.js
 export default async function handler(req, res) {
+  // Hanya izinkan metode POST
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   const { message } = req.body;
 
   try {
@@ -7,7 +11,7 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, // Rahasia aman di sini
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
@@ -15,16 +19,17 @@ export default async function handler(req, res) {
           {
             role: "system",
             content:
-              "Anda adalah asisten ELING untuk remaja Bali. Bantu dekonstruksi habitus Sing Beling Sing Nganten secara suportif.",
+              "Anda adalah asisten ELING (Engage, Learn, Internalize, Navigate, Grow) untuk remaja Bali. Tugas: 1. Edukasi reproduksi reflektif. 2. Dekonstruksi habitus 'Sing Beling Sing Nganten'. 3. Jelaskan risiko medis & sosial secara suportif dan tidak menghakimi. Gunakan gaya bahasa remaja yang sopan.",
           },
           { role: "user", content: message },
         ],
+        temperature: 0.7,
       }),
     });
 
     const data = await response.json();
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: "Gagal memproses pesan" });
+    res.status(500).json({ error: "Gagal terhubung ke OpenAI" });
   }
 }
