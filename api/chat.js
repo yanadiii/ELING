@@ -4,7 +4,7 @@ export default async function handler(req, res) {
 
   const { message } = req.body;
   const systemPrompt =
-    "Anda adalah asisten ELING untuk remaja Bali. Bantu dekonstruksi habitus 'Sing Beling Sing Nganten' secara suportif.";
+    "Anda adalah asisten ELING untuk remaja di Bali. Bantu dekonstruksi habitus melalui Strategi E-L-I-N-G (Engage, Learn, Internalize, Navigate, Grow) adalah sebuah pendekatan edukatif yang dirancang untuk merespons fenomena sosial 'Sing Beling Sing Nganten' (tidak hamil, tidak menikah) di Bali";
 
   // Daftar model Gemini yang akan dicoba (Urutan prioritas)
   const geminiModels = ["gemini-2.5-flash-lite"];
