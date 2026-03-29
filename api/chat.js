@@ -7,11 +7,7 @@ export default async function handler(req, res) {
     "Anda adalah asisten ELING untuk remaja Bali. Bantu dekonstruksi habitus 'Sing Beling Sing Nganten' secara suportif.";
 
   // Daftar model Gemini yang akan dicoba (Urutan prioritas)
-  const geminiModels = [
-    "gemini-1.5-flash-latest",
-    "gemini-1.5-flash",
-    "gemini-pro",
-  ];
+  const geminiModels = ["gemini-2.5-flash-lite"];
   let geminiSuccess = false;
   let responseData = null;
 
