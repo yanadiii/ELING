@@ -11,7 +11,7 @@
     <style>
       :root {
         --primary: #2c3e50;
-        --secondary: #27ae60;
+        --secondary: #050606;
         --bg: #f4f7f6;
         --white: #ffffff;
       }
@@ -299,85 +299,106 @@
     </footer>
 
     <script>
-      // MASUKKAN API KEY ANDA DI SINI
-      const OPENAI_API_KEY =
-        "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";
+            // MASUKKAN API KEY ANDA DI SINI
+            const OPENAI_API_KEY =
+              "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";
 
-      const chatContent = document.getElementById("chat-content");
-      const userMsgInput = document.getElementById("user-msg");
-      const sendBtn = document.getElementById("send-btn");
+            const chatContent = document.getElementById("chat-content");
+            const userMsgInput = document.getElementById("user-msg");
+            const sendBtn = document.getElementById("send-btn");
 
-      function appendMessage(role, text) {
-        const div = document.createElement("div");
-        div.className = `bubble ${role}`;
-        div.innerHTML = text;
-        chatContent.appendChild(div);
-        chatContent.scrollTo(0, chatContent.scrollHeight);
-      }
+            function appendMessage(role, text) {
+              const div = document.createElement("div");
+              div.className = `bubble ${role}`;
+              div.innerHTML = text;
+              chatContent.appendChild(div);
+              chatContent.scrollTo(0, chatContent.scrollHeight);
+            }
 
+      // Ubah bagian fetch di index.html kamu menjadi seperti ini:
       async function handleSend() {
-        const text = userMsgInput.value.trim();
-        if (!text) return;
+          const text = userMsgInput.value.trim();
+          if (!text) return;
 
-        // Kirim pesan user ke UI
-        appendMessage("user", text);
-        userMsgInput.value = "";
-        sendBtn.disabled = true;
+          appendMessage("user", text);
+          userMsgInput.value = "";
 
-        // Indikator Berpikir
-        const typingDiv = document.createElement("div");
-        typingDiv.className = "typing";
-        typingDiv.innerText = "ELING sedang merespon...";
-        chatContent.appendChild(typingDiv);
-        chatContent.scrollTo(0, chatContent.scrollHeight);
+          try {
+              // Kita tidak menembak ke OpenAI lagi, tapi ke API buatan kita sendiri
+              const response = await fetch("/api/chat", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ message: text })
+              });
 
-        try {
-          const response = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${OPENAI_API_KEY}`,
-              },
-              body: JSON.stringify({
-                model: "gpt-4o-mini", // Model termurah, tercepat, dan cerdas
-                messages: [
-                  {
-                    role: "system",
-                    content:
-                      "Anda adalah asisten virtual 'ELING' (Engage, Learn, Internalize, Navigate, Grow) untuk remaja Bali. Tugas Anda: 1. Memberikan edukasi reproduksi yang konstruktivistik dan reflektif. 2. Membantu remaja mendekonstruksi habitus sosial 'Sing Beling Sing Nganten' yang menormalisasi seks pranikah. 3. Menjelaskan risiko medis (HIV/AIDS, stunting) dan sosial (putus sekolah) secara suportif. 4. Gunakan gaya bahasa remaja yang sopan, privat, dan tidak menghakimi. Jaga kerahasiaan identitas pengguna.",
-                  },
-                  { role: "user", content: text },
-                ],
-                max_tokens: 500,
-                temperature: 0.7,
-              }),
-            },
-          );
-
-          const data = await response.json();
-          typingDiv.remove(); // Hapus indikator berpikir
-
-          if (data.choices && data.choices[0]) {
-            appendMessage("bot", data.choices[0].message.content);
-          } else {
-            appendMessage("bot", "Maaf, terjadi kesalahan teknis pada server.");
+              const data = await response.json();
+              appendMessage("bot", data.choices[0].message.content);
+          } catch (err) {
+              appendMessage("bot", "Maaf, ELING sedang istirahat sebentar.");
           }
-        } catch (err) {
-          typingDiv.remove();
-          appendMessage(
-            "bot",
-            "Gagal terhubung ke server. Periksa koneksi internet atau API Key Anda.",
-          );
-        } finally {
-          sendBtn.disabled = false;
-        }
       }
+              const text = userMsgInput.value.trim();
+              if (!text) return;
 
-      userMsgInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") handleSend();
-      });
+              // Kirim pesan user ke UI
+              appendMessage("user", text);
+              userMsgInput.value = "";
+              sendBtn.disabled = true;
+
+              // Indikator Berpikir
+              const typingDiv = document.createElement("div");
+              typingDiv.className = "typing";
+              typingDiv.innerText = "ELING sedang merespon...";
+              chatContent.appendChild(typingDiv);
+              chatContent.scrollTo(0, chatContent.scrollHeight);
+
+              try {
+                const response = await fetch(
+                  "https://api.openai.com/v1/chat/completions",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${OPENAI_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                      model: "gpt-4o-mini", // Model termurah, tercepat, dan cerdas
+                      messages: [
+                        {
+                          role: "system",
+                          content:
+                            "Anda adalah asisten virtual 'ELING' (Engage, Learn, Internalize, Navigate, Grow) untuk remaja Bali. Tugas Anda: 1. Memberikan edukasi reproduksi yang konstruktivistik dan reflektif. 2. Membantu remaja mendekonstruksi habitus sosial 'Sing Beling Sing Nganten' yang menormalisasi seks pranikah. 3. Menjelaskan risiko medis (HIV/AIDS, stunting) dan sosial (putus sekolah) secara suportif. 4. Gunakan gaya bahasa remaja yang sopan, privat, dan tidak menghakimi. Jaga kerahasiaan identitas pengguna.",
+                        },
+                        { role: "user", content: text },
+                      ],
+                      max_tokens: 500,
+                      temperature: 0.7,
+                    }),
+                  },
+                );
+
+                const data = await response.json();
+                typingDiv.remove(); // Hapus indikator berpikir
+
+                if (data.choices && data.choices[0]) {
+                  appendMessage("bot", data.choices[0].message.content);
+                } else {
+                  appendMessage("bot", "Maaf, terjadi kesalahan teknis pada server.");
+                }
+              } catch (err) {
+                typingDiv.remove();
+                appendMessage(
+                  "bot",
+                  "Gagal terhubung ke server. Periksa koneksi internet atau API Key Anda.",
+                );
+              } finally {
+                sendBtn.disabled = false;
+              }
+
+
+            userMsgInput.addEventListener("keypress", (e) => {
+              if (e.key === "Enter") handleSend();
+            });
     </script>
   </body>
 </html>
