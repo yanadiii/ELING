@@ -8,10 +8,12 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
       :root {
         --primary: #2c3e50;
-        --secondary: #27ae60; /* Hijau */
+        --secondary: #27ae60;
         --bg: #f4f7f6;
         --white: #ffffff;
       }
@@ -32,7 +34,7 @@
       nav {
         background: var(--primary);
         color: white;
-        padding: 0.5rem 5%; /* Sedikit dikurangi padding vertikalnya */
+        padding: 0.5rem 5%;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -41,38 +43,30 @@
         z-index: 1000;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       }
-
-      /* Styling untuk Logo Image di kiri atas */
       .logo-link {
         display: flex;
         align-items: center;
         text-decoration: none;
       }
       .logo-image {
-        height: 40px; /* Sesuaikan tinggi logo */
+        height: 40px;
         width: auto;
         display: block;
       }
-      /* Jika gambar logo tidak load, teks ini akan muncul style-nya */
       .logo-link span {
         color: white;
         font-weight: 600;
         font-size: 1.5rem;
-        margin-left: 10px; /* Jarak jika ada teks disamping gambar */
       }
-
       .hero {
         text-align: center;
         padding: 4rem 10%;
         background: linear-gradient(135deg, var(--primary), #34495e);
         color: white;
       }
-
-      /* Main content wrapper agar footer tetap di bawah */
       .main-content {
         flex: 1;
       }
-
       .container {
         display: grid;
         grid-template-columns: 1fr 400px;
@@ -81,7 +75,6 @@
         max-width: 1300px;
         margin: 0 auto;
       }
-
       .card {
         background: white;
         padding: 1.5rem;
@@ -89,19 +82,14 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         margin-bottom: 1.5rem;
       }
-
-      /* Perbaikan: Judul Engage dll jadi hijau */
       .card h3 {
         color: var(--secondary);
         margin-bottom: 0.5rem;
         font-weight: 600;
       }
-
-      /* Styling khusus untuk card "Apa itu ELING" */
       .about-card {
         border-left: 5px solid var(--secondary);
       }
-
       .chat-widget {
         background: white;
         border-radius: 20px;
@@ -110,7 +98,7 @@
         flex-direction: column;
         height: 600px;
         position: sticky;
-        top: 80px; /* Sesuaikan dengan tinggi nav baru */
+        top: 80px;
         overflow: hidden;
         border: 1px solid #ddd;
         z-index: 10;
@@ -136,6 +124,30 @@
         max-width: 85%;
         font-size: 0.9rem;
       }
+
+      /* CSS KHUSUS UNTUK HASIL MARKDOWN AI */
+      .bubble p {
+        margin-bottom: 8px;
+      }
+      .bubble p:last-child {
+        margin-bottom: 0;
+      }
+      .bubble ul,
+      .bubble ol {
+        margin-left: 20px;
+        margin-bottom: 8px;
+      }
+      .bubble h1,
+      .bubble h2,
+      .bubble h3 {
+        font-size: 1rem;
+        margin: 10px 0 5px 0;
+        color: var(--primary);
+      }
+      .bot h3 {
+        color: var(--secondary);
+      }
+
       .bot {
         background: #e9ecef;
         align-self: flex-start;
@@ -168,9 +180,6 @@
         border-radius: 30px;
         outline: none;
       }
-      input:focus {
-        border-color: var(--secondary);
-      }
       button {
         background: var(--secondary);
         color: white;
@@ -179,7 +188,7 @@
         border-radius: 30px;
         cursor: pointer;
         font-weight: 600;
-        transition: background 0.3s;
+        transition: 0.3s;
       }
       button:hover {
         background: #219150;
@@ -189,13 +198,12 @@
         cursor: not-allowed;
       }
 
-      /* Footer styling */
       footer {
         background: var(--primary);
         color: rgba(255, 255, 255, 0.7);
         text-align: center;
         padding: 1.5rem 5%;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         margin-top: auto;
       }
 
@@ -244,39 +252,29 @@
             <h3>Apa itu ELING?</h3>
             <p>
               Strategi E-L-I-N-G (Engage, Learn, Internalize, Navigate, Grow)
-              adalah sebuah pendekatan edukatif yang dirancang untuk merespons
-              fenomena sosial "Sing Beling Sing Nganten" (tidak hamil, tidak
-              menikah) di Bali.
-            </p>
-            <br />
-            <p>
-              Pendekatan ini menggunakan refleksi konstruktivistik untuk
-              mendekonstruksi habitus tersebut, mendorong remaja untuk membangun
-              pemahaman baru yang lebih sehat dan bertanggung jawab mengenai
-              kesehatan reproduksi dan pernikahan, tanpa mengesampingkan
-              nilai-nilai budaya yang positif.
+              adalah pendekatan edukatif inovatif untuk merespons fenomena
+              sosial Bali dengan cara yang sehat dan bertanggung jawab.
             </p>
           </div>
-
           <div class="card">
             <h3>Engage & Learn</h3>
             <p>
-              Membangun keterlibatan dan pemahaman kritis remaja Bali terhadap
-              narasi budaya dan kesehatan.
+              Membangun keterlibatan dan pemahaman kritis remaja terhadap narasi
+              budaya dan kesehatan.
             </p>
           </div>
           <div class="card">
             <h3>Internalize & Navigate</h3>
             <p>
               Menanamkan nilai kesehatan secara mendalam dan menavigasi risiko
-              masa depan melalui keputusan yang sadar.
+              melalui keputusan yang sadar.
             </p>
           </div>
           <div class="card">
             <h3>Grow</h3>
             <p>
-              Tumbuh menjadi generasi Bali yang sehat, bertanggung jawab, dan
-              cerdas secara seksual.
+              Tumbuh menjadi generasi yang cerdas secara seksual dan bangga akan
+              identitas budaya Bali.
             </p>
           </div>
         </div>
@@ -288,8 +286,7 @@
           <div id="chat-content">
             <div class="bubble bot">
               <b>Om Swastiastu!</b><br />Ada yang ingin kamu ceritakan atau
-              tanyakan hari ini mengenai kesehatan reproduksi atau perencanaan
-              masa depan?
+              tanyakan mengenai kesehatan reproduksi hari ini?
             </div>
           </div>
           <div class="chat-input">
@@ -311,10 +308,19 @@
       const userMsgInput = document.getElementById("user-msg");
       const sendBtn = document.getElementById("send-btn");
 
+      // Fungsi untuk menambahkan pesan ke layar
       function appendMessage(role, text) {
         const div = document.createElement("div");
         div.className = `bubble ${role}`;
-        div.innerHTML = text;
+
+        if (role === "bot") {
+          // PROSES MARKDOWN (Bintang-bintang jadi Bold, dll)
+          div.innerHTML = marked.parse(text);
+        } else {
+          // User input tetap teks biasa demi keamanan
+          div.innerText = text;
+        }
+
         chatContent.appendChild(div);
         chatContent.scrollTo(0, chatContent.scrollHeight);
       }
@@ -333,7 +339,6 @@
         chatContent.appendChild(typingDiv);
 
         try {
-          // Asumsi path API ini bekerja
           const response = await fetch("/api/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -347,14 +352,14 @@
           } else {
             appendMessage(
               "bot",
-              "Maaf, asisten ELING sedang beristirahat sebentar. Coba lagi nanti ya.",
+              "Maaf, ELING sedang beristirahat sebentar. Coba lagi nanti ya.",
             );
           }
         } catch (err) {
           if (document.querySelector(".typing")) typingDiv.remove();
           appendMessage(
             "bot",
-            "Gagal terhubung ke server. Pastikan koneksi internet Anda aktif.",
+            "Gagal terhubung ke server. Cek koneksi internetmu.",
           );
         } finally {
           sendBtn.disabled = false;
