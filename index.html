@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strategi ELING | Sinergi Budaya & Teknologi AI</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2c3e50;
+        --secondary: #27ae60;
+        --bg: #f4f7f6;
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--bg);
+        color: var(--primary);
+        line-height: 1.6;
+      }
+
+      nav {
+        background: var(--primary);
+        color: var(--white);
+        padding: 1rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        font-weight: 600;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 4rem 10%;
+        background: linear-gradient(135deg, var(--primary), #34495e);
+        color: var(--white);
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      .hero p {
+        font-weight: 300;
+        max-width: 800px;
+        margin: 0 auto;
+        opacity: 0.9;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 2.5rem;
+        padding: 3rem 5%;
+        max-width: 1300px;
+        margin: 0 auto;
+      }
+
+      .strategy-info h2 {
+        border-left: 5px solid var(--secondary);
+        padding-left: 15px;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+      }
+      .card {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+        border: 1px solid #eee;
+      }
+      .card h3 {
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+      .card p {
+        font-size: 0.95rem;
+        color: #555;
+      }
+
+      .chat-widget {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        height: 600px;
+        position: sticky;
+        top: 100px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+      }
+      .chat-header {
+        background: var(--secondary);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+      }
+      .chat-header strong {
+        display: block;
+        font-size: 1.1rem;
+      }
+      .chat-header small {
+        opacity: 0.9;
+        font-size: 0.75rem;
+      }
+
+      #chat-content {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+        background: #fafafa;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .bubble {
+        padding: 12px 16px;
+        border-radius: 18px;
+        max-width: 85%;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        position: relative;
+      }
+      .bot {
+        background: #e9ecef;
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+        color: #2d3436;
+      }
+      .user {
+        background: var(--secondary);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+        box-shadow: 0 2px 5px rgba(39, 174, 96, 0.3);
+      }
+
+      .typing {
+        font-style: italic;
+        font-size: 0.8rem;
+        color: #888;
+        margin-bottom: 10px;
+      }
+
+      .chat-input {
+        padding: 1.2rem;
+        display: flex;
+        border-top: 1px solid #eee;
+        background: white;
+        gap: 10px;
+      }
+      input {
+        flex: 1;
+        border: 1px solid #ddd;
+        padding: 12px 18px;
+        border-radius: 30px;
+        outline: none;
+        transition: 0.3s;
+        font-family: inherit;
+      }
+      input:focus {
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+      }
+      button {
+        background: var(--secondary);
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+      button:hover {
+        background: #219150;
+        transform: translateY(-2px);
+      }
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      footer {
+        text-align: center;
+        padding: 2.5rem;
+        background: var(--primary);
+        color: white;
+        font-size: 0.85rem;
+        margin-top: 4rem;
+      }
+
+      @media (max-width: 950px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+        .chat-widget {
+          position: relative;
+          top: 0;
+          width: 100%;
+          height: 550px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">ELING</div>
+      <div>Sinergi Budaya & Teknologi AI</div>
+    </nav>
+
+    <section class="hero">
+      <h1>Strategi E-L-I-N-G</h1>
+      <p>
+        Media Pendukung Dekonstruksi Habitus "Sing Beling Sing Nganten" Melalui
+        Kecerdasan Buatan yang Konstruktivistik dan Reflektif.
+      </p>
+    </section>
+
+    <div class="container">
+      <div class="strategy-info">
+        <h2>Implementasi Strategi</h2>
+
+        <div class="card">
+          <h3>Apa itu ELING?</h3>
+          <p>
+            ELING (Engage, Learn, Internalize, Navigate, Grow) adalah model
+            edukasi yang bertujuan mengubah struktur mental (habitus) remaja
+            Bali agar sadar akan kesehatan reproduksi tanpa kehilangan jati diri
+            kulturalnya.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Peran AI dalam ELING</h3>
+          <p>
+            AI Chatbot di sini berfungsi sebagai <b>media pendukung utama</b>.
+            Ia menjamin keberlanjutan edukasi secara privat, anonim, dan dapat
+            diakses kapan saja untuk membantu remaja melakukan refleksi mandiri.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Dekonstruksi Habitus</h3>
+          <p>
+            Melalui dialog interaktif, AI membantu remaja mempertanyakan kembali
+            normalisasi risiko "Sing Beling Sing Nganten", membangun kesadaran
+            kritis atas bahaya medis seperti HIV/AIDS dan stunting.
+          </p>
+        </div>
+      </div>
+
+      <div class="chat-widget">
+        <div class="chat-header">
+          <strong>ELING Assistant</strong>
+          <small>Pusat Konsultasi Privat & Anonim</small>
+        </div>
+        <div id="chat-content">
+          <div class="bubble bot">
+            <b>Om Swastiastu!</b><br />
+            Selamat datang di ruang privat ELING. Di sini kamu bisa bertanya
+            atau bercerita apa saja tentang kesehatan reproduksi tanpa perlu
+            merasa malu atau takut. Apa yang sedang kamu pikirkan hari ini?
+          </div>
+        </div>
+        <div class="chat-input">
+          <input
+            type="text"
+            id="user-msg"
+            placeholder="Ketik pesan kamu di sini..."
+          />
+          <button id="send-btn" onclick="handleSend()">Kirim</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 Strategi ELING. Didesain untuk mendukung masa depan remaja
+      Bali yang sehat dan bertanggung jawab.
+    </footer>
+
+    <script>
+      // MASUKKAN API KEY ANDA DI SINI
+      const OPENAI_API_KEY =
+        "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";
+
+      const chatContent = document.getElementById("chat-content");
+      const userMsgInput = document.getElementById("user-msg");
+      const sendBtn = document.getElementById("send-btn");
+
+      function appendMessage(role, text) {
+        const div = document.createElement("div");
+        div.className = `bubble ${role}`;
+        div.innerHTML = text;
+        chatContent.appendChild(div);
+        chatContent.scrollTo(0, chatContent.scrollHeight);
+      }
+
+      async function handleSend() {
+        const text = userMsgInput.value.trim();
+        if (!text) return;
+
+        // Kirim pesan user ke UI
+        appendMessage("user", text);
+        userMsgInput.value = "";
+        sendBtn.disabled = true;
+
+        // Indikator Berpikir
+        const typingDiv = document.createElement("div");
+        typingDiv.className = "typing";
+        typingDiv.innerText = "ELING sedang merespon...";
+        chatContent.appendChild(typingDiv);
+        chatContent.scrollTo(0, chatContent.scrollHeight);
+
+        try {
+          const response = await fetch(
+            "https://api.openai.com/v1/chat/completions",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${OPENAI_API_KEY}`,
+              },
+              body: JSON.stringify({
+                model: "gpt-4o-mini", // Model termurah, tercepat, dan cerdas
+                messages: [
+                  {
+                    role: "system",
+                    content:
+                      "Anda adalah asisten virtual 'ELING' (Engage, Learn, Internalize, Navigate, Grow) untuk remaja Bali. Tugas Anda: 1. Memberikan edukasi reproduksi yang konstruktivistik dan reflektif. 2. Membantu remaja mendekonstruksi habitus sosial 'Sing Beling Sing Nganten' yang menormalisasi seks pranikah. 3. Menjelaskan risiko medis (HIV/AIDS, stunting) dan sosial (putus sekolah) secara suportif. 4. Gunakan gaya bahasa remaja yang sopan, privat, dan tidak menghakimi. Jaga kerahasiaan identitas pengguna.",
+                  },
+                  { role: "user", content: text },
+                ],
+                max_tokens: 500,
+                temperature: 0.7,
+              }),
+            },
+          );
+
+          const data = await response.json();
+          typingDiv.remove(); // Hapus indikator berpikir
+
+          if (data.choices && data.choices[0]) {
+            appendMessage("bot", data.choices[0].message.content);
+          } else {
+            appendMessage("bot", "Maaf, terjadi kesalahan teknis pada server.");
+          }
+        } catch (err) {
+          typingDiv.remove();
+          appendMessage(
+            "bot",
+            "Gagal terhubung ke server. Periksa koneksi internet atau API Key Anda.",
+          );
+        } finally {
+          sendBtn.disabled = false;
+        }
+      }
+
+      userMsgInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") handleSend();
+      });
+    </script>
+  </body>
+</html>
