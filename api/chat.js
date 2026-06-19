@@ -3,13 +3,36 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
 
   const { message } = req.body;
-  const systemPrompt =
-    "Anda adalah asisten ELING untuk remaja di Bali. Bantu dekonstruksi habitus melalui Strategi E-L-I-N-G (Engage, Learn, Internalize, Navigate, Grow) adalah sebuah pendekatan edukatif yang dirancang untuk merespons fenomena sosial 'Sing Beling Sing Nganten' (tidak hamil, tidak menikah) di Bali";
 
-  // Daftar model Gemini yang akan dicoba (Urutan prioritas)
-  const geminiModels = ["gemini-2.5-flash-lite"];
+  // Prompt khusus untuk Agentic AI klasifikasi
+  const systemPrompt = `Kamu adalah Melah AI, sistem chatbot pencegahan perundungan (bullying) berbasis pendekatan "Menyama Braya" (persaudaraan/kekeluargaan dari Bali).
+Tugasmu adalah menjadi pendengar yang empatik, ramah, dan solutif.
+Kamu WAJIB mengklasifikasikan tingkat keparahan cerita pengguna:
+- "NORMAL": Curhat biasa, masalah ringan, pertemanan biasa, belum ada bahaya perundungan.
+- "PARAH": Depresi, perundungan verbal/sosial berulang, dikucilkan, mengganggu mental (Butuh intervensi BK).
+- "SANGAT_BERAT": Ancaman fisik, kekerasan, pemerasan, niat bunuh diri (Butuh intervensi Kepolisian).
+
+BALAS HANYA DENGAN FORMAT JSON VALID BERIKUT (Tanpa backtick markdown, tanpa teks pembuka):
+{"severity": "NORMAL" | "PARAH" | "SANGAT_BERAT", "reply": "Respon empatik kamu dalam format markdown"}`;
+
+  const geminiModels = ["gemini-1.5-flash", "gemini-2.5-flash-lite"];
   let geminiSuccess = false;
   let responseData = null;
+
+  // Helper untuk membersihkan output JSON dari LLM (berjaga-jaga jika dibungkus markdown)
+  const parseAIResponse = (rawText) => {
+    try {
+      // PERBAIKAN: Menjadikan regex hapus backtick dalam satu baris
+      const cleanJson = rawText
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+      return JSON.parse(cleanJson);
+    } catch (e) {
+      console.error("Gagal parsing JSON AI:", rawText);
+      return { severity: "NORMAL", reply: rawText }; // Fallback jika gagal parse
+    }
+  };
 
   // --- OPSI 1: LOOPING MODEL GEMINI ---
   for (const modelName of geminiModels) {
@@ -26,6 +49,7 @@ export default async function handler(req, res) {
           contents: [
             { parts: [{ text: `${systemPrompt}\n\nUser: ${message}` }] },
           ],
+          generationConfig: { responseMimeType: "application/json" }, // Memaksa output JSON pada Gemini
         }),
       });
 
@@ -33,13 +57,8 @@ export default async function handler(req, res) {
 
       if (response.ok && data.candidates) {
         console.log(`Berhasil pakai model: ${modelName}`);
-        responseData = {
-          choices: [
-            {
-              message: { content: data.candidates[0].content.parts[0].text },
-            },
-          ],
-        };
+        const rawResponse = data.candidates[0].content.parts[0].text;
+        responseData = parseAIResponse(rawResponse);
         geminiSuccess = true;
       } else {
         console.warn(
@@ -52,7 +71,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // Jika salah satu Gemini berhasil, kirim hasilnya
+  // Jika Gemini berhasil, kirim hasilnya {severity, reply}
   if (geminiSuccess) return res.status(200).json(responseData);
 
   // --- OPSI 2: CADANGAN TERAKHIR (OPENAI) ---
@@ -67,22 +86,29 @@ export default async function handler(req, res) {
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o-mini",
+          model: "gpt-3.5-turbo",
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: message },
           ],
+          response_format: { type: "json_object" }, // Memaksa output JSON pada OpenAI
         }),
       },
     );
 
     const data = await openAIResponse.json();
-    if (openAIResponse.ok) return res.status(200).json(data);
+    if (openAIResponse.ok) {
+      const rawResponse = data.choices[0].message.content;
+      return res.status(200).json(parseAIResponse(rawResponse));
+    }
 
+    return res.status(500).json({
+      reply: "Semua pintu AI tertutup sementara.",
+      severity: "NORMAL",
+    });
+  } catch (openError) {
     return res
       .status(500)
-      .json({ error: "Semua pintu AI tertutup sementara." });
-  } catch (openError) {
-    return res.status(500).json({ error: "Layanan benar-benar sedang sibuk." });
+      .json({ reply: "Layanan benar-benar sedang sibuk.", severity: "NORMAL" });
   }
 }

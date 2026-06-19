@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Strategi ELING | Sinergi Budaya & Teknologi AI</title>
+    <title>Melah AI | Sinergi Budaya & Teknologi AI</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
       rel="stylesheet"
@@ -12,10 +12,11 @@
 
     <style>
       :root {
-        --primary: #2c3e50;
-        --secondary: #27ae60;
-        --bg: #f4f7f6;
+        --primary: #1a365d;
+        --secondary: #3182ce;
+        --bg: #f0f4f8;
         --white: #ffffff;
+        --danger: #e53e3e;
       }
       * {
         box-sizing: border-box;
@@ -31,6 +32,7 @@
         flex-direction: column;
         min-height: 100vh;
       }
+
       nav {
         background: var(--primary);
         color: white;
@@ -47,21 +49,25 @@
         display: flex;
         align-items: center;
         text-decoration: none;
+        gap: 10px;
       }
       .logo-image {
         height: 40px;
-        width: auto;
-        display: block;
+        width: 40px;
+        border-radius: 50%;
+        background: white;
+        padding: 2px;
       }
       .logo-link span {
         color: white;
         font-weight: 600;
         font-size: 1.5rem;
       }
+
       .hero {
         text-align: center;
         padding: 4rem 10%;
-        background: linear-gradient(135deg, var(--primary), #34495e);
+        background: linear-gradient(135deg, var(--primary), #2a4365);
         color: white;
       }
       .main-content {
@@ -75,6 +81,7 @@
         max-width: 1300px;
         margin: 0 auto;
       }
+
       .card {
         background: white;
         padding: 1.5rem;
@@ -90,6 +97,7 @@
       .about-card {
         border-left: 5px solid var(--secondary);
       }
+
       .chat-widget {
         background: white;
         border-radius: 20px;
@@ -118,14 +126,13 @@
         flex-direction: column;
         gap: 12px;
       }
+
       .bubble {
         padding: 12px 16px;
         border-radius: 18px;
         max-width: 85%;
         font-size: 0.9rem;
       }
-
-      /* CSS KHUSUS UNTUK HASIL MARKDOWN AI */
       .bubble p {
         margin-bottom: 8px;
       }
@@ -137,19 +144,14 @@
         margin-left: 20px;
         margin-bottom: 8px;
       }
-      .bubble h1,
-      .bubble h2,
-      .bubble h3 {
-        font-size: 1rem;
-        margin: 10px 0 5px 0;
-        color: var(--primary);
-      }
       .bot h3 {
         color: var(--secondary);
+        font-size: 1rem;
+        margin: 10px 0 5px 0;
       }
 
       .bot {
-        background: #e9ecef;
+        background: #e2e8f0;
         align-self: flex-start;
         border-bottom-left-radius: 2px;
       }
@@ -166,6 +168,7 @@
         padding: 0 1.5rem;
         margin-bottom: 10px;
       }
+
       .chat-input {
         padding: 1.2rem;
         display: flex;
@@ -191,11 +194,63 @@
         transition: 0.3s;
       }
       button:hover {
-        background: #219150;
+        background: #2b6cb0;
       }
       button:disabled {
         background: #ccc;
         cursor: not-allowed;
+      }
+
+      /* Modal CSS */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+      .modal-box {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+      .modal-box h2 {
+        margin-top: 0;
+        color: var(--danger);
+      }
+      .modal-box p {
+        color: #4a5568;
+        margin-bottom: 25px;
+      }
+      .btn-report {
+        background-color: var(--danger);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .btn-close {
+        background-color: #cbd5e0;
+        color: #2d3748;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: bold;
       }
 
       footer {
@@ -225,75 +280,79 @@
       <a href="#" class="logo-link">
         <img
           src="logo.png"
-          alt="Logo ELING"
+          alt="Logo MELAH"
           class="logo-image"
           onerror="
-            this.style.display = 'none';
-            this.nextElementSibling.style.display = 'block';
+            this.src = 'https://via.placeholder.com/40/ffffff/1a365d?text=M'
           "
         />
-        <span style="display: none">ELING</span>
+        <span>Melah AI</span>
       </a>
-      <div>Sinergi Budaya & Teknologi</div>
+      <div>Pencegahan Perundungan Terpadu</div>
     </nav>
 
     <div class="main-content">
       <section class="hero">
-        <h1>Strategi E-L-I-N-G</h1>
+        <h1>Program MELAH</h1>
         <p>
-          Dekonstruksi Habitus "Sing Beling Sing Nganten" melalui Refleksi
-          Konstruktivistik.
+          Integrasi Pendekatan Menyama Braya dan Agentic AI untuk Membangun
+          Lingkungan Sekolah yang Aman dan Harmonis.
         </p>
       </section>
 
       <div class="container">
         <div class="info">
           <div class="card about-card">
-            <h3>Apa itu ELING?</h3>
+            <h3>Apa itu MELAH?</h3>
             <p>
-              Strategi E-L-I-N-G (Engage, Learn, Internalize, Navigate, Grow)
-              adalah pendekatan edukatif inovatif untuk merespons fenomena
-              sosial Bali dengan cara yang sehat dan bertanggung jawab.
+              Melah adalah inisiatif pencegahan *bullying* yang menggabungkan
+              kecerdasan buatan proaktif dengan kearifan lokal Bali. Sistem ini
+              dirancang untuk mendeteksi perundungan sedini mungkin dan
+              memberikan ruang aman bagi siswa.
             </p>
           </div>
           <div class="card">
-            <h3>Engage & Learn</h3>
+            <h3>Filosofi Menyama Braya</h3>
             <p>
-              Membangun keterlibatan dan pemahaman kritis remaja terhadap narasi
-              budaya dan kesehatan.
+              Menanamkan nilai-nilai persaudaraan dan kepedulian tanpa batas.
+              Mengajarkan siswa bahwa seluruh warga sekolah adalah saudara yang
+              harus saling menjaga dan menghormati.
             </p>
           </div>
           <div class="card">
-            <h3>Internalize & Navigate</h3>
+            <h3>Agentic AI (Teman Curhat)</h3>
             <p>
-              Menanamkan nilai kesehatan secara mendalam dan menavigasi risiko
-              melalui keputusan yang sadar.
+              Pendampingan psikologis awal yang empatik dan personal. AI dapat
+              menganalisis tingkat keparahan aduan untuk merekomendasikan
+              tindakan secara otomatis.
             </p>
           </div>
           <div class="card">
-            <h3>Grow</h3>
+            <h3>Sinergi POLRI & Sekolah</h3>
             <p>
-              Tumbuh menjadi generasi yang cerdas secara seksual dan bangga akan
-              identitas budaya Bali.
+              Terhubung langsung dengan Guru BK untuk penanganan internal, dan
+              terintegrasi dengan Polsek setempat untuk perlindungan darurat
+              jika terjadi ancaman serius.
             </p>
           </div>
         </div>
 
         <div class="chat-widget">
           <div class="chat-header">
-            <strong>ELING AI Assistant Privat & Anonim</strong>
+            <strong>Melah AI - Ruang Amanmu</strong>
           </div>
           <div id="chat-content">
             <div class="bubble bot">
-              <b>Om Swastiastu!</b><br />Ada yang ingin kamu ceritakan atau
-              tanyakan mengenai kesehatan reproduksi hari ini?
+              <b>Om Swastiastu!</b><br />Halo, aku Melah AI. Kalau ada yang
+              mengganjal di hati atau pengalaman kurang enak di sekolah, cerita
+              aja ke aku. Privasimu aman di sini.
             </div>
           </div>
           <div class="chat-input">
             <input
               type="text"
               id="user-msg"
-              placeholder="Ketik pesan kamu..."
+              placeholder="Ketik curhatan kamu di sini..."
             />
             <button id="send-btn" onclick="handleSend()">Kirim</button>
           </div>
@@ -301,26 +360,33 @@
       </div>
     </div>
 
-    <footer>develop by Adi Maha</footer>
+    <!-- Popup Eskalasi -->
+    <div class="modal-overlay" id="reportModal">
+      <div class="modal-box">
+        <h2 id="modalTitle">Peringatan Keamanan</h2>
+        <p id="modalDesc">
+          Kondisi kamu sepertinya butuh bantuan lebih lanjut.
+        </p>
+        <button class="btn-report" id="btnAction">Lapor Sekarang</button>
+        <button class="btn-close" onclick="closeModal()">Nanti Saja</button>
+      </div>
+    </div>
+
+    <footer>developed by Adi Maha</footer>
 
     <script>
       const chatContent = document.getElementById("chat-content");
       const userMsgInput = document.getElementById("user-msg");
       const sendBtn = document.getElementById("send-btn");
 
-      // Fungsi untuk menambahkan pesan ke layar
       function appendMessage(role, text) {
         const div = document.createElement("div");
         div.className = `bubble ${role}`;
-
         if (role === "bot") {
-          // PROSES MARKDOWN (Bintang-bintang jadi Bold, dll)
           div.innerHTML = marked.parse(text);
         } else {
-          // User input tetap teks biasa demi keamanan
           div.innerText = text;
         }
-
         chatContent.appendChild(div);
         chatContent.scrollTo(0, chatContent.scrollHeight);
       }
@@ -335,7 +401,7 @@
 
         const typingDiv = document.createElement("div");
         typingDiv.className = "typing";
-        typingDiv.innerText = "ELING sedang merespon...";
+        typingDiv.innerText = "Melah AI sedang mengetik...";
         chatContent.appendChild(typingDiv);
 
         try {
@@ -347,12 +413,17 @@
           const data = await response.json();
           typingDiv.remove();
 
-          if (data.choices && data.choices[0]) {
-            appendMessage("bot", data.choices[0].message.content);
+          if (data && data.reply) {
+            appendMessage("bot", data.reply);
+
+            // Trigger popup berdasarkan severity yang dikembalikan API
+            if (data.severity === "PARAH" || data.severity === "SANGAT_BERAT") {
+              showModal(data.severity);
+            }
           } else {
             appendMessage(
               "bot",
-              "Maaf, ELING sedang beristirahat sebentar. Coba lagi nanti ya.",
+              "Maaf, Melah sedang beristirahat sebentar. Coba lagi nanti ya.",
             );
           }
         } catch (err) {
@@ -369,6 +440,43 @@
       userMsgInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") handleSend();
       });
+
+      // Logika Modal/Popup
+      function showModal(severity) {
+        const modal = document.getElementById("reportModal");
+        const title = document.getElementById("modalTitle");
+        const desc = document.getElementById("modalDesc");
+        const btn = document.getElementById("btnAction");
+
+        if (severity === "PARAH") {
+          title.innerText = "Butuh Bantuan Lebih Lanjut?";
+          title.style.color = "#d69e2e"; // Kuning/Orange
+          btn.style.backgroundColor = "#d69e2e";
+          desc.innerText =
+            "Melah merasa kamu sedang menghadapi perundungan yang cukup berat. Mari kita teruskan ini ke Guru BK sekolahmu agar rahasia terjamin dan masalahmu terselesaikan.";
+          btn.innerText = "Teruskan ke Guru BK";
+          btn.onclick = () => {
+            alert("Menghubungkan ke portal aduan BK...");
+            closeModal();
+          };
+        } else if (severity === "SANGAT_BERAT") {
+          title.innerText = "🚨 DARURAT KEAMANAN 🚨";
+          title.style.color = "#e53e3e"; // Merah
+          btn.style.backgroundColor = "#e53e3e";
+          desc.innerText =
+            "Ini sudah masuk ancaman serius yang membahayakanmu. Jangan takut, polisi siap melindungimu. Lapor sekarang untuk perlindungan darurat!";
+          btn.innerText = "Lapor Polsek Setempat";
+          btn.onclick = () => {
+            alert("Meneruskan laporan awal ke Unit PPA Polsek terdekat...");
+            closeModal();
+          };
+        }
+        modal.style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("reportModal").style.display = "none";
+      }
     </script>
   </body>
 </html>
